@@ -1,8 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Home</title>
+</head>
+
+<body>
+	<?php
+	
+		if($_SERVER['REQUEST_METHOD']==='GET'){
+			show_index_page();
+		}
+		else if($_SERVER['REQUEST_METHOD']==='POST'){
+			
+			//connect to the database
+			$db = new MySQLi(
+					'localhost', //server or host address
+					'root', //username for connecting to database
+					'Cryptex1990', //user's password 
+					'test' //database being connected to
+					);
+					
+			//check if there was a connection error and respond accordingly
+			if($db->connect_errno){
+				die('Connection failed:'.connect_error);
+			}
+			
+			//select details from database using the details provided by admin
+			else{
+				echo("connection successful!!!");
+				
+				$username=$_POST["u"];
+				$password=$_POST["p"];
+				print("Username: ".$username);
+				print("Password: ".$password);
+			//if the sql query returns a value
+			
+			//present login confirmation and redirect to home page
+			
+			}
+		}
+		else{
+			header("Location: index.html");	
+		}
+		
+		function show_index_page(){
+			
+			$index = <<<HTML
+			
+			<!DOCTYPE html>
 <html >
   <head>
     <meta charset="UTF-8">
-    <title> Administrators' Login</title>
+    <title> Administrator Login</title>
     
     
     <link rel="stylesheet" href="css/normalize.css">
@@ -89,4 +139,13 @@ input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgb
 </div>
       
   </body>
+</html>
+			
+HTML;
+
+		print($html);
+		}
+	  
+	?>
+</body>
 </html>
