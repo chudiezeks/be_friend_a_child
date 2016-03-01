@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="6b5d8ce4-7a12-4b18-b970-4086db401d3e" name="MAMP" url="http://localhost:8888">
+        <fileTransfer mountedRoot="/Applications/MAMP/htdocs/be_friend_a_child" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
