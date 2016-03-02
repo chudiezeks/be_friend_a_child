@@ -1,3 +1,98 @@
+<?php
+
+	
+	if($_SERVER['REQUEST_METHOD']==='GET'){
+		session_exists();
+	}
+	else if ($_SERVER['REQUEST_METHOD']==='POST'){
+		add_to_database();
+	}
+	
+	function add_to_database(){
+		
+		//connect to the database
+			$db = new MySQLi(
+					'localhost', //server or host address
+					'root', //username for connecting to database
+					'Cryptex1990', //user's password 
+					'test' //database being connected to
+					);
+					
+			//check if there was a connection error and respond accordingly
+			if($db->connect_errno){
+				die('Connection failed:'.connect_error);
+			}
+			else{
+				
+				//read input details from index.html
+				$firstname=$_POST['firstname'];
+				$surname=$_POST['surname'];
+				$gender=$_POST['gender'];
+				$day=$_POST['day'];
+				$month=$_POST['month'];
+				$year=$_POST['year'];
+				$address=$_POST['address'];
+				$picture=$_POST['picture'];
+				
+				$query="SELECT `firstname`, `lastname` FROM `friend` WHERE `firstname` = '$firstname' AND `lastname` = '$surname' LIMIT 1";
+					$output=$db->query($query) or die("Selection Query Failed !!!");
+					$return=NULL;
+				while($row = $output->fetch_assoc()) {
+					$return=$row["firstname"];
+					}
+				if(isset($return)){
+					echo ("User exists already");
+				}
+				else{
+					$insert="";
+					$outcome=$db->query($insert) or die("Insert statement failed!!!");
+				}
+			}	
+	}
+	
+	function session_exists(){
+		
+		$db = new MySQLi(
+						'localhost', //server or host address
+						'root', //username for connecting to database
+						'Cryptex1990', //user's password 
+						'test' //database being connected to
+						);
+		
+		
+		// SQL Query To Fetch Complete Information Of User
+		//check if there was a connection error and respond accordingly
+				if($db->connect_errno){
+					die('Connection failed:'.connect_error);
+				}
+				else{
+					session_start();// Starting Session
+					// Establishing Connection with Server by passing server_name, user_id and password as a parameter
+					// Selecting Database
+					$user_check=$_SESSION['user_login']; // Storing Session
+					
+					//select all values from database using the entered values as filter
+					$query="SELECT *
+					FROM `Administrators`
+					WHERE `email` = '$user_check' LIMIT 1";
+					$output=$db->query($query) or die("Selection Query Failed !!!");
+				}
+				$login_session=NULL;
+				while($row = $output->fetch_assoc()) {
+					$login_session=$row["email"];
+					}
+		if(isset($login_session)){
+			show_create_user();
+		}
+		else{
+			header("Location: index.php");
+		}
+	}
+	
+		function show_create_user() {
+    //display the HTML form to register
+    //or sign a user in
+    $htmlpage = <<<HTMLPAGE
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -8,7 +103,7 @@
     <link rel="stylesheet" media="all" type="text/css" href="cssadminpage/pro_dropline_ie.css" />
 
     <!--  jquery core -->
-    <script src="jsadminpage/jquery/jquery-1.4.1.min.js" type="text/javascript"></script>
+  /*  <script src="jsadminpage/jquery/jquery-1.4.1.min.js" type="text/javascript"></script>
 
     <!--  styled select box script version 2 -->
     <script src="jsadminpage/jquery/jquery.selectbox-0.5_style_2.js" type="text/javascript"></script>
@@ -38,11 +133,11 @@
                 width : 300
             });
         });
-    </script>
+    </script>*/
 
     <!--  date picker script -->
     <link rel="stylesheet" href="cssadminpage/datePicker.css" type="text/css" />
-    <script src="jsadminpage/jquery/date.js" type="text/javascript"></script>
+ /*   <script src="jsadminpage/jquery/date.js" type="text/javascript"></script>
     <script src="jsadminpage/jquery/jquery.datePicker.js" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
         $(function()
@@ -110,7 +205,7 @@
 // and update the datePicker to reflect it...
             $('#d').trigger('change');
         });
-    </script>
+    </script> */
 
 </head>
 <body>
@@ -143,7 +238,7 @@
             <div class="nav-divider">&nbsp;</div>
             <div class="showhide-account"><img src="imagesadminpage/shared/nav/nav_myaccount.gif" width="93" height="14" alt="" /></div>
             <div class="nav-divider">&nbsp;</div>
-            <a href="" id="logout"><img src="imagesadminpage/shared/nav/nav_logout.gif" width="64" height="14" alt="" /></a>
+            <a href="logout.php" id="logout"><img src="imagesadminpage/shared/nav/nav_logout.gif" width="64" height="14" alt="" /></a>
             <div class="clear">&nbsp;</div>
 
 
@@ -155,7 +250,7 @@
         <div class="nav">
             <div class="table">
 
-                <ul class="select"><li><a href="adminhome.html"><b>Home</b></a>
+                <ul class="select"><li><a href="adminhome.php"><b>Home</b></a>
 
                 </li>
                 </ul>
@@ -168,7 +263,7 @@
 
                     <div class="select_sub">
                         <ul class="sub">
-                            <li><a href="createlogin.html">Create User Login</a></li>
+                            <li><a href="createlogin.php">Create User Login</a></li>
                             <li><a href="#nogo">Delete User Login</a></li>
                         </ul>
                     </div>
@@ -248,25 +343,26 @@
                                     <!--  end step-holder -->
 
                                     <!-- start id-form -->
+                                    <form action='createlogin.php' method='post'>
                                     <table border="0" cellpadding="0" cellspacing="0"  id="id-form">
                                         <tr>
                                             <th valign="top">Firstname:</th>
-                                            <td><input type="text" class="inp-form" /></td>
+                                            <td><input type="text" class="inp-form" name="firstname"/></td>
                                             <td></td>
 
                                         </tr>
                                         <tr>
                                             <th valign="top">Surname:</th>
-                                            <td><input type="text" class="inp-form" /></td>
+                                            <td><input type="text" class="inp-form" name="surname"/></td>
                                             <td></td>
 
                                         </tr>
                                         <tr>
                                             <th valign="top">Gender:</th>
                                             <td>
-                                                <select  class="styledselect_form_1">
-                                                    <option value="">Male</option>
-                                                    <option value="">Female</option>
+                                                <select  class="styledselect_form_1" name="gender">
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
 
                                                 </select>
                                             </td>
@@ -281,9 +377,7 @@
                                                 <table border="0" cellpadding="0" cellspacing="0">
                                                     <tr  valign="top">
                                                         <td>
-                                                            <form id="chooseDateForm" action="#">
-
-                                                                <select id="d" class="styledselect-day">
+                                                                <select id="d" class="styledselect-day" name="day">
                                                                     <option value="">dd</option>
                                                                     <option value="1">1</option>
                                                                     <option value="2">2</option>
@@ -319,7 +413,7 @@
                                                                 </select>
                                                         </td>
                                                         <td>
-                                                            <select id="m" class="styledselect-month">
+                                                            <select id="m" class="styledselect-month" name="month">
                                                                 <option value="">mmm</option>
                                                                 <option value="1">Jan</option>
                                                                 <option value="2">Feb</option>
@@ -336,7 +430,7 @@
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            <select  id="y"  class="styledselect-year">
+                                                            <select  id="y"  class="styledselect-year" name="year">
                                                                 <option value="">yyyy</option>
                                                                 <option value="2005">2005</option>
                                                                 <option value="2006">2006</option>
@@ -345,7 +439,6 @@
                                                                 <option value="2009">2009</option>
                                                                 <option value="2010">2010</option>
                                                             </select>
-                                                            </form>
                                                         </td>
                                                         <td><a href=""  id="date-pick"><img src="imagesadminpage/createlogin/icon_calendar.jpg" alt="" /></a></td>
                                                     </tr>
@@ -356,12 +449,12 @@
                                         </tr>
                                         <tr>
                                             <th valign="top">Address:</th>
-                                            <td><textarea rows="" cols="" class="form-textarea"></textarea></td>
+                                            <td><textarea rows="" cols="" class="form-textarea" name="address"></textarea></td>
                                             <td></td>
                                         </tr>
                                         <tr>
                                             <th>Picture:</th>
-                                            <td><input type="file" class="file_1" /></td>
+                                            <td><input type="file" class="file_1" name="picture"/></td>
                                             <td>
                                                 <div class="bubble-left"></div>
                                                 <div class="bubble-inner">JPEG, GIF 5MB max per image</div>
@@ -372,12 +465,13 @@
                                         <tr>
                                             <th>&nbsp;</th>
                                             <td valign="top">
-                                                <input type="button" value="" class="form-submit" />
+                                                <input type="submit" value="" class="form-submit" />
                                                 <input type="reset" value="" class="form-reset"  />
                                             </td>
                                             <td></td>
                                         </tr>
                                     </table>
+                                    </form>
                                     <!-- end id-form  -->
 
                                 </td>
@@ -435,3 +529,8 @@
 
 </body>
 </html>
+HTMLPAGE;
+
+print($htmlpage);
+}
+?>

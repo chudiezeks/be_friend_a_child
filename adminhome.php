@@ -1,3 +1,52 @@
+<?php
+
+	if($_SERVER['REQUEST_METHOD']==='GET'){
+			session_exists();
+		}
+	
+	function session_exists(){
+		
+		$db = new MySQLi(
+						'localhost', //server or host address
+						'root', //username for connecting to database
+						'Cryptex1990', //user's password 
+						'test' //database being connected to
+						);
+		
+		
+		// SQL Query To Fetch Complete Information Of User
+		//check if there was a connection error and respond accordingly
+				if($db->connect_errno){
+					die('Connection failed:'.connect_error);
+				}
+				else{
+					session_start();// Starting Session
+					// Establishing Connection with Server by passing server_name, user_id and password as a parameter
+					// Selecting Database
+					$user_check=$_SESSION['user_login']; // Storing Session
+					
+					//select all values from database using the entered values as filter
+					$query="SELECT *
+					FROM `Administrators`
+					WHERE `email` = '$user_check' LIMIT 1";
+					$output=$db->query($query) or die("Selection Query Failed !!!");
+				}
+				$login_session=NULL;
+				while($row = $output->fetch_assoc()) {
+					$login_session=$row["email"];
+					}
+		if(isset($login_session)){
+			show_admin_home();
+		}
+		else{
+			header("Location: index.php");
+		}
+	}
+	
+	function show_admin_home() {
+    //display the HTML form to register
+    //or sign a user in
+    $htmlpage = <<<HTMLPAGE
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -8,7 +57,7 @@
 	<link rel="stylesheet" media="all" type="text/css" href="cssadminpage/pro_dropline_ie.css" />
 
 	<!--  jquery core -->
-	<script src="jsadminpage/jquery/jquery-1.4.1.min.js" type="text/javascript"></script>
+/*	<script src="jsadminpage/jquery/jquery-1.4.1.min.js" type="text/javascript"></script>
 
 	<!--  styled select box script version 2 -->
 	<script src="jsadminpage/jquery/jquery.selectbox-0.5_style_2.js" type="text/javascript"></script>
@@ -21,7 +70,7 @@
 
 	<!--  styled select box script version 3 -->
 	<script src="jsadminpage/jquery/jquery.selectbox-0.5_style_2.js" type="text/javascript"></script>
-	<script type="text/javascript">
+	</script>
 		$(document).ready(function() {
 			$('.styledselect_pages').selectbox({ inputClass: "styledselect_pages" });
 		});
@@ -38,11 +87,11 @@
 				width : 300
 			});
 		});
-	</script>
+	</script>*/
 
 	<!--  date picker script -->
 	<link rel="stylesheet" href="cssadminpage/datePicker.css" type="text/css" />
-	<script src="jsadminpage/jquery/date.js" type="text/javascript"></script>
+/*	<script src="jsadminpage/jquery/date.js" type="text/javascript"></script>
 	<script src="jsadminpage/jquery/jquery.datePicker.js" type="text/javascript"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(function()
@@ -110,7 +159,7 @@
 // and update the datePicker to reflect it...
 			$('#d').trigger('change');
 		});
-	</script>
+	</script>*/
 
 
 
@@ -145,7 +194,7 @@
 			<div class="nav-divider">&nbsp;</div>
 			<div class="showhide-account"><img src="imagesadminpage/shared/nav/nav_myaccount.gif" width="93" height="14" alt="" /></div>
 			<div class="nav-divider">&nbsp;</div>
-			<a href="" id="logout"><img src="imagesadminpage/shared/nav/nav_logout.gif" width="64" height="14" alt="" /></a>
+			<a href="logout.php" id="logout"><img src="imagesadminpage/shared/nav/nav_logout.gif" width="64" height="14" alt="" /></a>
 			<div class="clear">&nbsp;</div>
 
 		
@@ -157,7 +206,7 @@
 		<div class="nav">
 		<div class="table">
 		
-		<ul class="select"><li><a href="adminhome.html"><b>Home</b></a>
+		<ul class="select"><li><a href="adminhome.php"><b>Home</b></a>
 
 		</li>
 		</ul>
@@ -170,7 +219,7 @@
 
 		<div class="select_sub">
 			<ul class="sub">
-				<li><a href="../../../Desktop/New%20folder/BefriendAChildTestSurvey-master/createlogin.html">Create User Login</a></li>
+				<li><a href="createlogin.php">Create User Login</a></li>
 				<li><a href="#nogo">Delete User Login</a></li>
 			</ul>
 		</div>
@@ -239,7 +288,7 @@
 			<!--  start table-content  -->
 			<div id="table-content">
 			<h2><span style="text-decoration: underline;"> Features: </span></h2>
-			<h3><a href="../../../Desktop/New%20folder/BefriendAChildTestSurvey-master/createlogin.html">Create User Login</a></h3>
+			<h3><a href="createlogin.html">Create User Login</a></h3>
 			<h3>Delete User Login</h3>
 			<h3>Full Report</h3>
 			<h3>Survey Query</h3>
@@ -285,3 +334,8 @@
  
 </body>
 </html>
+HTMLPAGE;
+
+print($htmlpage);
+}
+?>
