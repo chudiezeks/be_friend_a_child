@@ -116,6 +116,7 @@
         });
     </script>
 
+    //javascript for random password
     <script type="text/javascript" src="jscreatelogin/randompassword.js"></script>
 
 </head>
@@ -254,16 +255,19 @@
                                     <!--  end step-holder -->
 
                                     <!-- start id-form -->
+                                    //added form tags...?
+                                    <form action="createloginsuccessful.php" method="post">
+
                                     <table border="0" cellpadding="0" cellspacing="0"  id="id-form">
                                         <tr>
                                             <th valign="top">Firstname:</th>
-                                            <td><input type="text" class="inp-form" /></td>
+                                            <td><input type="text" class="inp-form" name="firstname"/></td>
                                             <td></td>
 
                                         </tr>
                                         <tr>
                                             <th valign="top">Surname:</th>
-                                            <td><input type="text" class="inp-form" /></td>
+                                            <td><input type="text" class="inp-form" name="surname"/></td>
                                             <td></td>
 
                                         </tr>
@@ -367,10 +371,24 @@
                                         </tr>
                                         <tr>
                                             <th valign="top">E-mail:</th>
-                                            <td><input type="email" class="inp-form" /></td>
+                                            <td><input type="email" class="inp-form" name="email"/></td>
                                             <td></td>
 
                                         </tr>
+
+                                        //added field for random password
+                                        <tr>
+                                            <th valign="top">Password:</th>
+                                            <td>
+                                                <label for="pass"></label>
+                                                <input type="password" class="inp-form" name="password" id="pass" />
+                                            </td>
+                                            <td>
+                                                <button type="button" onclick="output()">Create Password</button>
+                                            </td>
+
+                                        </tr>
+
                                         <tr>
                                             <th>Picture:</th>
                                             <td><input type="file" class="file_1" /></td>
@@ -390,6 +408,7 @@
                                             <td></td>
                                         </tr>
                                     </table>
+                                    </form>
                                     <!-- end id-form  -->
 
                                     <img style="float:right; padding-right:10px;padding-bottom:10px;" src="imagesadminpage/shared/face-pink.png">

@@ -19,14 +19,16 @@
 
 
         //setting some variables with form values
-        $name = $_POST["name"];
+        $firstname = $_POST["firstname"];
+        $surname = $_POST["surname"];
         $password = $_POST["password"];
         $email = $_POST["email"];
+        $name = $firstname . " " . $surname;
 
         //email subject
         $subject = "Befriend A Child - Survey Login";
 
-        //email content
+        //email body in html
         $txt = "Dear $name,
                 <br><br>
                 An account has been set up in your name.
@@ -73,6 +75,8 @@
 
         echo function_exists('proc_open') ? "Yep, that will work" : "Sorry, that won't work";*/
 
+
+        echo $txt;
     ?>
 
 </body>
